@@ -122,7 +122,7 @@ if [ ! "$usb_dev" ]; then
 fi
 
 # Check for GRUB installation binary
-if [ -n "${GRUB_EFI}" ]; then
+if [ -n "${GRUB_EFI:-}" ]; then
 	grubefi="$GRUB_EFI"
 else
 	grubefi=$(command -v grub-install || command -v grub2-install) || cleanUp 3
@@ -256,9 +256,8 @@ cp ./grub.cfg.example "${data_mnt}/${data_subdir}"/grub*/ ||
 # Download wimboot
 wimboot_url='https://gitlab.com/api/v4/projects/55131919/packages/generic/wimboot/v2.8.0-1/wimboot-v2.8.0-1.tar.gz'
 mountiso_url='https://gitlab.com/api/v4/projects/55267894/packages/generic/mountiso/v0.1.0/mountiso-v0.1.0.zip'
-(cd "${data_mnt}/${data_subdir}"/grub*/ && cd tools &&
-	curl -sL "$wimboot_url" | tar -zxvf - --wildcards --no-anchored 'wimboot.*' &&
-	curl -sL "$mountiso_url" -o mountiso.zip && unzip mountiso.zip 'mountiso*' && rm mountiso.zip) || cleanUp 10
+(cd "${data_mnt}/${data_subdir}"/grub*/ && cd tools && curl -sL "$wimboot_url" | tar -zxvf - --wildcards --no-anchored 'wimboot.*' ) || cleanUp 10
+(cd "${data_mnt}/${data_subdir}"/grub*/ && cd tools && curl -sL "$mountiso_url" -o mountiso.zip && unzip mountiso.zip 'mountiso*' && rm mountiso.zip) || cleanUp 10
 
 ipxe_url='https://boot.ipxe.org/ipxe.efi'
 curl -sL "$ipxe_url" -o "$data_mnt/$data_subdir/isos/ipxe.efi" || cleanUp 10
