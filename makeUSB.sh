@@ -74,10 +74,14 @@ case "$1" in
 	;;
 esac
 
+if [ -n "${SUDO_USER-}" ]; then
+    echo "Do NOT run this script with sudo."
+    exit 1
+fi
+
 # Check for root
 if [ "$(id -u)" -ne 0 ]; then
-	echo "This script needs to run with root privileges."
-	exit 1
+	exec sudo "$0" "$@"
 fi
 
 # Get original user
