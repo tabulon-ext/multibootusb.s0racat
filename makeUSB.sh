@@ -74,16 +74,16 @@ case "$1" in
 	;;
 esac
 
-if [ -n "${SUDO_USER-}" ]; then
+# If already root via manual sudo, abort
+if [ -n "${SUDO_USER-}" ] && [ -z "${AUTO_SUDO-}" ]; then
     echo "Do NOT run this script with sudo."
     exit 1
 fi
 
-# Check for root
+# If not root, re-exec with sudo and mark as auto
 if [ "$(id -u)" -ne 0 ]; then
-	exec sudo "$0" "$@"
+    exec sudo AUTO_SUDO=1 "$0" "$@"
 fi
-
 # Get original user
 normal_user="${SUDO_USER-$(id -un)}"
 
