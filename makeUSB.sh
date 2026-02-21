@@ -128,6 +128,9 @@ else
 	grubefi=$(command -v grub-install || command -v grub2-install) || cleanUp 3
 fi
 
+# Print all steps
+set -o verbose
+
 # Unmount device
 unmountUSB "$usb_dev"
 
@@ -153,8 +156,7 @@ if [ "$update_only" -eq 0 ]; then
 		;;
 	esac
 
-	# Print all steps
-	set -o verbose
+
 
 	# Remove partitions
 	sgdisk --zap-all "$usb_dev"

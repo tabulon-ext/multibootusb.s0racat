@@ -25,6 +25,13 @@ Visit the [project's website for more information][website].
 [isos]: https://mbusb.aguslr.com/isos.html
 [website]: https://mbusb.aguslr.com/
 
+## Installation
+
+```bash
+nix-build default.nix
+sudo ./result/bin/makeUSB.sh /dev/sda exfat
+```
+
 ## Dependencies
 
 - coreutils
